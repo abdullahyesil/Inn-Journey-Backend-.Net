@@ -8,11 +8,9 @@ namespace SednaReservationAPI.Application.Features.Queries.Review.GetReviewHotel
 {
     public class GetReviewHotelByIdQueryResponse
     {
-        public string? Id { get; set; }
-        public string? HotelId { get; set; }
-        public string? UserId { get; set; }
-        public float Rating { get; set; }
-        public string? Comment { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public List<Domain.Entities.Review> reviews { get; set; }
+        public int TotalCount { get; set; }
+
+
     }
 }

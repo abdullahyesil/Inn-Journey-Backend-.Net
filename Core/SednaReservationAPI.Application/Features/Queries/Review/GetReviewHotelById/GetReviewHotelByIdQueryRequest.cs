@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SednaReservationAPI.Application.Features.Queries.Review.GetReviewHotelById
 {
-    public class GetReviewHotelByIdQueryRequest:IRequest<List<GetReviewHotelByIdQueryResponse>>
+    public class GetReviewHotelByIdQueryRequest:IRequest<GetReviewHotelByIdQueryResponse>
     {
         public string? HotelId {  get; set; }
         public int Page { get; set; }

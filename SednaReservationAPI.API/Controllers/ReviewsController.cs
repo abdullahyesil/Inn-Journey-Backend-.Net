@@ -57,10 +57,10 @@ namespace SednaReservationAPI.API.Controllers
             UpdateReviewCommandResponse response = await _mediator.Send(updateReviewCommandRequest);
             return Ok(response);
         }
-        [HttpGet("comments/{HotelId}")]
-        public async Task<IActionResult> getReviewHotelById([FromRoute] GetReviewHotelByIdQueryRequest getReviewHotelByIdQueryRequest)
+        [HttpGet("comments/")]
+        public async Task<IActionResult> getReviewHotelById([FromQuery] GetReviewHotelByIdQueryRequest getReviewHotelByIdQueryRequest)
         {
-            List<GetReviewHotelByIdQueryResponse> response = await _mediator.Send(getReviewHotelByIdQueryRequest);
+            GetReviewHotelByIdQueryResponse response = await _mediator.Send(getReviewHotelByIdQueryRequest);
             return Ok(response);
 
         }
