@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SednaReservationAPI.Application.Consts;
+using SednaReservationAPI.Application.CustomAttributes;
+using SednaReservationAPI.Application.Enum;
 using SednaReservationAPI.Application.Features.Commands.Hotel.CreateHotel;
 using SednaReservationAPI.Application.Features.Commands.Hotel.DeleteHotel;
 using SednaReservationAPI.Application.Features.Commands.Hotel.UpdateHotel;
@@ -29,15 +32,18 @@ namespace SednaReservationAPI.API.Controllers
             _hotelWriteRepository = hotelWriteRepository;
             _mediator = mediator;
         }
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme) ]
+
         [HttpGet]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Hotels, ActionType = ActionType.Reading, Definition = "Get Hotels")]
         public async Task<IActionResult> Get([FromQuery] GetAllHotelQueryRequest getAllHotelQueryRequest)
         {
             List<GetAllHotelQueryResponse> response = await _mediator.Send(getAllHotelQueryRequest);
             return Ok(response);
         }
         [HttpGet("{id}")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Hotels, ActionType = ActionType.Reading, Definition = "Get Hotels ById")]
         public async Task<IActionResult> GetById([FromRoute] GetByIdHotelQueryRequest getByIdHotelQueryRequest)
         {
             GetByIdHotelQueryResponse response = await _mediator.Send(getByIdHotelQueryRequest);
@@ -45,12 +51,14 @@ namespace SednaReservationAPI.API.Controllers
         }
 
         [HttpPost]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Hotels, ActionType = ActionType.Reading, Definition = "Add Hotels")]
         public async Task<IActionResult> Add(CreateHotelCommandRequest createHotelCommandRequest)
         {
             CreateHotelCommandResponse response = await _mediator.Send(createHotelCommandRequest);
             return Ok(response);
         }
         [HttpDelete("{Id}")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Hotels, ActionType = ActionType.Reading, Definition = "Delete Hotels")]
         public async Task<IActionResult> DeleteAsync([FromRoute] DeleteHotelCommandRequest deleteHotelCommandRequest)
         {
 
@@ -58,6 +66,7 @@ namespace SednaReservationAPI.API.Controllers
             return Ok(response);
         }
         [HttpPut]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Hotels, ActionType = ActionType.Reading, Definition = "Put Hotels")]
         public async Task<IActionResult> Update([FromBody] UpdateHotelCommandRequest updateHotelCommandRequest)
         {
             UpdateHotelCommandResponse response = await _mediator.Send(updateHotelCommandRequest);
