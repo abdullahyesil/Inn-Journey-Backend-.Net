@@ -34,7 +34,7 @@ namespace SednaReservationAPI.Application.Features.Queries.Reservation.GetReserv
                 .Skip(request.Page.Value * request.Size.Value)
                 .Take(request.Size.Value)
                 .Select(rezer => new GetReservationByUserIdQueryResponse
-             {
+             {  
                  Id = rezer.Id.ToString(),
                  UserId = rezer.UserId,
                  HotelId = rezer.HotelId,

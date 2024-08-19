@@ -22,14 +22,16 @@ namespace SednaReservationAPI.Persistence.Services
 
         public async Task<bool> CreateRole(string name)
         {
-          IdentityResult result= await _roleManager.CreateAsync(new() { Name = name });
+          IdentityResult result= await _roleManager.CreateAsync(new() { Id= Guid.NewGuid().ToString(), Name = name });
             return result.Succeeded;
           
         }
 
-        public async Task<bool> DeleteRole(string name)
+        public async Task<bool> DeleteRole(string Id)
         {
-          IdentityResult result = await _roleManager.DeleteAsync(new() { Name = name });
+            AppRole role= await _roleManager.FindByIdAsync(Id);
+
+          IdentityResult result = await _roleManager.DeleteAsync(role);
             return result.Succeeded;
 
         }
@@ -59,7 +61,8 @@ namespace SednaReservationAPI.Persistence.Services
 
         public async Task<bool> UpdateRole(string id)
         {
-           IdentityResult result= await _roleManager.UpdateAsync(new() { Id = id });
+            AppRole appRole = await _roleManager.FindByIdAsync(id);
+           IdentityResult result= await _roleManager.UpdateAsync(appRole);
             return result.Succeeded;
         }
     }

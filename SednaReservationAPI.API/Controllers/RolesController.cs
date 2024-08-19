@@ -14,7 +14,7 @@ namespace SednaReservationAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes ="Admin")]
+    //[Authorize(AuthenticationSchemes ="Admin")]
 
     public class RolesController : ControllerBase
     {
@@ -59,7 +59,7 @@ namespace SednaReservationAPI.API.Controllers
             return Ok(response);
         }
         [AuthorizeDefinition(ActionType = ActionType.Deleting, Definition = "Delete Role", Menu = "Roles")]
-        [HttpDelete("{name}")]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteRole([FromRoute] DeleteRoleCommandRequest deleteRoleCommandRequest)
         {
             DeleteRoleCommandResponse response = await _mediator.Send(deleteRoleCommandRequest);

@@ -20,7 +20,7 @@ namespace SednaReservationAPI.Application.Features.Commands.Roles.DeleteRole
 
         public async Task<DeleteRoleCommandResponse> Handle(DeleteRoleCommandRequest request, CancellationToken cancellationToken)
         {
-            var result = await _roleServices.DeleteRole(request.Name);
+            var result = await _roleServices.DeleteRole(request.Id);
 
             return new()
             {
