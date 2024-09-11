@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace SednaReservationAPI.Application.Features.Commands.Hotel.UpdateHotel
         public float StarRating { get; set; }
         public int Star {  get; set; }
         public string? ImageUrl { get; set; }
+        public IFormFile? ImageFile { get; set; }
         public string? googleMap { get; set; }
     }
 }

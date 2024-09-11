@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SednaReservationAPI.Application.Abstractions;
 using SednaReservationAPI.Application.Abstractions.Services;
 using SednaReservationAPI.Application.Features.Commands.HotelExtensions.Create;
 using SednaReservationAPI.Application.Repositories;
@@ -57,6 +58,12 @@ namespace SednaReservationAPI.Persistence
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IRoleServices, RoleServices>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IEndPointReadRepository, EndPointReadRepository>();
+            services.AddScoped<IEndPointWriteRepository, EndPointWriteRepository>();
+            services.AddScoped<IMenuReadRepository, MenuReadRepository>();
+            services.AddScoped<IMenuWriteRepository, MenuWriteRepository>();
+            services.AddScoped<IAuthorizationEndPointService, AuthorizationEndPointService>();
         }
     }
 }

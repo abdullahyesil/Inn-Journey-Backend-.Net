@@ -1,5 +1,7 @@
 ﻿using Iyzipay.Model;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using SednaReservationAPI.Application.Abstractions;
 using SednaReservationAPI.Application.Repositories;
 using SednaReservationAPI.Domain.Entities;
 using System;
@@ -18,17 +20,35 @@ namespace SednaReservationAPI.Application.Features.Commands.Hotel.CreateHotel
         readonly IHotelWriteRepository _hotelWriteRepository;
         readonly IRoomWriteRepository _roomWriteRepository;
         readonly IRoomTypeReadRepository _roomTypeReadRepory;
+        readonly IFileService _fileService;
+        readonly IHttpContextAccessor _httpContextAccessor;
 
 
-        public CreateHotelCommandHandler(IHotelWriteRepository hotelWriteRepository, IRoomWriteRepository roomWriteRepository, IRoomTypeReadRepository roomTypeReadRepory)
+        public CreateHotelCommandHandler(IHotelWriteRepository hotelWriteRepository, IRoomWriteRepository roomWriteRepository, IRoomTypeReadRepository roomTypeReadRepory, IFileService fileService, IHttpContextAccessor httpContextAccessor)
         {
             _hotelWriteRepository = hotelWriteRepository;
             _roomWriteRepository = roomWriteRepository;
             _roomTypeReadRepory = roomTypeReadRepory;
+            _fileService = fileService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<CreateHotelCommandResponse> Handle(CreateHotelCommandRequest request, CancellationToken cancellationToken)
         {
+            if (request.ImageFile != null)
+            {
+                var fileResult = _fileService.SaveImage(request.ImageFile, 2400, 1600);
+
+
+                if (fileResult.Item1 == 1 && !string.IsNullOrEmpty(fileResult.Item2))
+                {
+                    var req = _httpContextAccessor.HttpContext.Request;
+                    var baseUrl = $"{req.Scheme}://{req.Host}";
+                    // Tam URL'yi oluşturuyoruz
+                    request.ImageUrl = Path.Combine(baseUrl, "res", fileResult.Item2).Replace("\\", "/");
+
+                }
+            }
 
             var hotel = new Domain.Entities.Hotel
             {
@@ -43,7 +63,6 @@ namespace SednaReservationAPI.Application.Features.Commands.Hotel.CreateHotel
                 googleMap = request.googleMap,
                 standartRoomPrice = request.standartRoomPrice,
             };
-
             await _hotelWriteRepository.AddAsync(hotel);
             await _hotelWriteRepository.SaveAsync();
 

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SednaReservationAPI.Persistence.Contexts;
@@ -11,9 +12,11 @@ using SednaReservationAPI.Persistence.Contexts;
 namespace SednaReservationAPI.Persistence.Migrations
 {
     [DbContext(typeof(SednaReservationAPIDbContext))]
-    partial class SednaReservationAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240910112751_3")]
+    partial class _3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

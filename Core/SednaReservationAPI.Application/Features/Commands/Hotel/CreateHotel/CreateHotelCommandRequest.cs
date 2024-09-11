@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using SednaReservationAPI.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace SednaReservationAPI.Application.Features.Commands.Hotel.CreateHotel
     public class CreateHotelCommandRequest : IRequest<CreateHotelCommandResponse>
     {   
         public string userId { get; set; }
+        public IFormFile ImageFile { get; set; }
         public string? Name { get; set; }
         public string? Address { get; set; }
         public string? Phone { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SednaReservationAPI.Application.Abstractions;
 using SednaReservationAPI.Application.Abstractions.Services.Configurations;
 using SednaReservationAPI.Application.Abstractions.Token;
 using SednaReservationAPI.Infrastructure.Services;
@@ -18,6 +19,7 @@ namespace SednaReservationAPI.Infrastructure
         {
             services.AddScoped<ITokenHandler, TokenHandler>();
             services.AddScoped<IApplicationService, ApplicationService>();
+          
         }
     }
 }

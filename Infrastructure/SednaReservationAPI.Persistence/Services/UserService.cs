@@ -17,10 +17,12 @@ namespace SednaReservationAPI.Persistence.Services
     public class UserService : IUserService
     {
         readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
+    
 
         public UserService(UserManager<AppUser> userManager)
         {
             _userManager = userManager;
+           
         }
 
         public async Task<CreateUserResponse> CreateAsync(CreateUser user)
@@ -152,6 +154,26 @@ namespace SednaReservationAPI.Persistence.Services
                 // Handle update failure
                 throw new Exception($"Update failed for user {user.Id}: {string.Join("\n", result.Errors.Select(e => $"{e.Code} - {e.Description}"))}");
             }
+        }
+
+        public async Task<bool> AddRoleToUser(string id, List<string> roles)
+        {
+            AppUser user = await _userManager.FindByIdAsync(id);
+            if (user == null) {
+                return await Task.FromResult(false);
+            }
+            await _userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
+            if (roles != null)
+            {
+                await _userManager.AddToRolesAsync(user, roles);
+            }
+            return await Task.FromResult(true);
+
+        }
+
+        public Task<bool> RemoveRoleFromUser(string id, List<AppRole> roles)
+        {
+            return Task.FromResult(true);
         }
     }
     

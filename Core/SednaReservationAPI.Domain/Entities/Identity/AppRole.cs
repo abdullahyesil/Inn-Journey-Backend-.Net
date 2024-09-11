@@ -9,6 +9,7 @@ namespace SednaReservationAPI.Domain.Entities.Identity
 {
     public class AppRole : IdentityRole<string>
     {
-        
+     
+        public ICollection<Endpoint> EndPoints { get; set; } 
     }
 }

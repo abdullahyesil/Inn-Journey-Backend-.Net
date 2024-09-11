@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SednaReservationAPI.Application.CustomAttributes;
 using SednaReservationAPI.Application.Enum;
+using SednaReservationAPI.Application.Features.Commands.AppUser.AddRoleToUser;
 using SednaReservationAPI.Application.Features.Commands.Roles.CreateRole;
 using SednaReservationAPI.Application.Features.Commands.Roles.DeleteRole;
 using SednaReservationAPI.Application.Features.Commands.Roles.UpdateRole;
@@ -27,8 +28,8 @@ namespace SednaReservationAPI.API.Controllers
         }
 
         [AuthorizeDefinition(ActionType = ActionType.Reading,Definition = "Get All Roles", Menu = "Roles")]
-        [HttpGet]
-        public async Task<IActionResult> GetRoles(GetRolesQueryRequest getRolesQueryRequest)
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetRoles([FromQuery] GetRolesQueryRequest getRolesQueryRequest)
         {
             GetRolesQueryResponse response = await _mediator.Send(getRolesQueryRequest);
             return Ok(response);
@@ -63,6 +64,14 @@ namespace SednaReservationAPI.API.Controllers
         public async Task<IActionResult> DeleteRole([FromRoute] DeleteRoleCommandRequest deleteRoleCommandRequest)
         {
             DeleteRoleCommandResponse response = await _mediator.Send(deleteRoleCommandRequest);
+            return Ok(response);
+        }
+
+        [HttpPost("AddRolesToUser")]
+        public async Task<IActionResult> AddRolestToUser(AddRoleToUserCommandRequest addRoleToUserCommandRequest) 
+        {
+
+            AddRoleToUserCommandResponse response = await _mediator.Send(addRoleToUserCommandRequest);
             return Ok(response);
         }
 

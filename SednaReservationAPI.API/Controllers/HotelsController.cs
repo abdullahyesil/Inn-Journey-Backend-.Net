@@ -52,7 +52,7 @@ namespace SednaReservationAPI.API.Controllers
 
         [HttpPost]
         [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Hotels, ActionType = ActionType.Reading, Definition = "Add Hotels")]
-        public async Task<IActionResult> Add(CreateHotelCommandRequest createHotelCommandRequest)
+        public async Task<IActionResult> Add([FromForm]CreateHotelCommandRequest createHotelCommandRequest)
         {
             CreateHotelCommandResponse response = await _mediator.Send(createHotelCommandRequest);
             return Ok(response);
@@ -67,7 +67,7 @@ namespace SednaReservationAPI.API.Controllers
         }
         [HttpPut]
         [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Hotels, ActionType = ActionType.Reading, Definition = "Put Hotels")]
-        public async Task<IActionResult> Update([FromBody] UpdateHotelCommandRequest updateHotelCommandRequest)
+        public async Task<IActionResult> Update([FromForm] UpdateHotelCommandRequest updateHotelCommandRequest)
         {
             UpdateHotelCommandResponse response = await _mediator.Send(updateHotelCommandRequest);
             return Ok(response);

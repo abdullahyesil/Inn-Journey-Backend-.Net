@@ -16,6 +16,9 @@ namespace SednaReservationAPI.Application.Abstractions.Services
         Task<AppUser> getByIdUser(string id);
         Task<List<AppUser>> getByIdUsers(IEnumerable<string> ids);
         Task<AppUser> UpdateUser(UpdateUser user);
+        Task<bool> AddRoleToUser(string id, List<string> roles);
+        Task<bool> RemoveRoleFromUser(string id, List<AppRole> roles);
+
 
 
     }

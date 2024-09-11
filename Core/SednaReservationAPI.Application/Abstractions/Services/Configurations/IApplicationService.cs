@@ -10,5 +10,6 @@ namespace SednaReservationAPI.Application.Abstractions.Services.Configurations
     public interface IApplicationService
     {
         List<Menu> GetAuthorizeDefiniationEndPoints(Type type);
+
     }
 }
