@@ -9,6 +9,9 @@ namespace SednaReservationAPI.Application.Features.Queries.AuthorizationEndPoint
 {
     public class GetRolesToEndPointQueryRequest:IRequest<GetRolesToEndPointQueryResponse>
     {
-        public string Id { get; set; }
+        public string Code { get; set; }
+        public string Menu { get; set; }
+
+
     }
 }

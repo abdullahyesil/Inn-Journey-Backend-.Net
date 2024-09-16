@@ -24,17 +24,18 @@ namespace SednaReservationAPI.Application.Features.Queries.AppUser.GetAllUser
 
         public async Task<List<GetAllUserQueryResponse>> Handle(GetAllUserQueryRequest request, CancellationToken cancellationToken)
         {
-            List<ListUser> userList = await _userService.GetAllUserAsync();
+            List<ListUser> userList = await _userService.GetAllUserAsync(request.Page, request.Size, request.value);
 
             List<GetAllUserQueryResponse> responseList = userList.Select(user => new GetAllUserQueryResponse
             {
                 Id = user.Id,
                 UserName = user.UserName,
-                Name = user.Name,
+                Name = user.Name,   
                 Email = user.Email,
                 Age = user.Age,
                 Phone = user.Phone,
                 Gender = user.Gender,
+                TotalCount = user.TotalCount,
             }).ToList();
 
             return responseList;

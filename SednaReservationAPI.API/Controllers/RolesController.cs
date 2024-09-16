@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SednaReservationAPI.API.Filters;
 using SednaReservationAPI.Application.CustomAttributes;
 using SednaReservationAPI.Application.Enum;
 using SednaReservationAPI.Application.Features.Commands.AppUser.AddRoleToUser;
@@ -10,6 +11,7 @@ using SednaReservationAPI.Application.Features.Commands.Roles.DeleteRole;
 using SednaReservationAPI.Application.Features.Commands.Roles.UpdateRole;
 using SednaReservationAPI.Application.Features.Queries.Role.GetRoleById;
 using SednaReservationAPI.Application.Features.Queries.Role.GetRoles;
+using SednaReservationAPI.Application.Features.Queries.Role.GetRolesByUserId;
 
 namespace SednaReservationAPI.API.Controllers
 {
@@ -50,6 +52,7 @@ namespace SednaReservationAPI.API.Controllers
             CreateRoleCommandResponse response = await _mediator.Send(createRoleCommandRequest);
             return Ok(response);
         }
+        [ServiceFilter(typeof(RolePermissionFilter))]
         [AuthorizeDefinition(ActionType = ActionType.Updating, Definition = "Updating Role", Menu = "Roles")]
 
         [HttpPut("{Id}")]
@@ -68,6 +71,7 @@ namespace SednaReservationAPI.API.Controllers
         }
 
         [HttpPost("AddRolesToUser")]
+        [AuthorizeDefinition(ActionType = ActionType.Deleting, Definition = "Add Roles to User", Menu = "Roles")]
         public async Task<IActionResult> AddRolestToUser(AddRoleToUserCommandRequest addRoleToUserCommandRequest) 
         {
 
@@ -75,6 +79,12 @@ namespace SednaReservationAPI.API.Controllers
             return Ok(response);
         }
 
-
+        [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Get Role By UserId", Menu = "Roles")]
+        [HttpGet("User/")]
+        public async Task<IActionResult> GetRoleByUserId([FromQuery] GetRolesByUserIdQueryRequest getRolesByUserId)
+        {
+            GetRolesByUserIdQueryResponse response = await _mediator.Send(getRolesByUserId);
+            return Ok(response);
+        }
     }
 }

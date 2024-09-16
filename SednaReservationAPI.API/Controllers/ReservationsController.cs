@@ -1,6 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SednaReservationAPI.Application.Consts;
+using SednaReservationAPI.Application.CustomAttributes;
+using SednaReservationAPI.Application.Enum;
 using SednaReservationAPI.Application.Features.Commands.Reservation.CreateReservation;
 using SednaReservationAPI.Application.Features.Commands.Reservation.DeleteReservation;
 using SednaReservationAPI.Application.Features.Commands.Reservation.UpdateReservation;
@@ -28,12 +31,14 @@ namespace SednaReservationAPI.API.Controllers
             _mediator = mediator;
         }
         [HttpGet]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Reservation, ActionType = ActionType.Reading, Definition = "Get All Reservation")]
         public async Task<IActionResult> Get([FromQuery] GetAllReservationQueryRequest getAllReservationQueryRequest)
         {
             List<GetAllReservationQueryResponse> response = await _mediator.Send(getAllReservationQueryRequest);
             return Ok(response);
         }
         [HttpGet("{Id}")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Reservation, ActionType = ActionType.Reading, Definition = "Get Reservation to By Id")]
         public async Task<IActionResult> GetById([FromRoute] GetByIdReservationQueryRequest getByIdReservationQueryRequest)
         {
 
@@ -41,30 +46,35 @@ namespace SednaReservationAPI.API.Controllers
             return Ok(response);
         }
         [HttpPost]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Reservation, ActionType = ActionType.Writing, Definition = "Add Reservation")]
         public async Task<IActionResult> addReservation(CreateReservationCommandRequest createReservationCommandRequest)
         {
             CreateReservationCommandResponse response = await _mediator.Send(createReservationCommandRequest);
                 return Ok(response);
         }
         [HttpDelete("{Id}")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Reservation, ActionType = ActionType.Deleting, Definition = "Delete Reservation")]
         public async Task<IActionResult> deleteReservation([FromRoute] DeleteReservationCommandRequest deleteReservationCommandRequest)
         {
             DeleteReservationCommandResponse response = await _mediator.Send(deleteReservationCommandRequest);
             return Ok(response);
         }
         [HttpPut]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Reservation, ActionType = ActionType.Updating, Definition = "Update Reservation")]
         public async Task<IActionResult> updateReservation([FromBody] UpdateReservationCommandRequest updateReservationCommandRequest)
         {
             UpdateReservationCommandResponse response = await _mediator.Send(updateReservationCommandRequest);
             return Ok(response);
         }
         [HttpGet("hotel/")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Reservation, ActionType = ActionType.Reading, Definition = "Get Reservation By Hotel Id")]
         public async Task<IActionResult> getHotelByReservations([FromQuery] GetHotelByIdReservationQueryRequest getHotelByIdReservationQueryRequest)
         {
             GetHotelByIdReservationQueryResponse response = await _mediator.Send(getHotelByIdReservationQueryRequest);
             return Ok(response);
         }
-        [HttpGet("user")]       
+        [HttpGet("user")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Reservation, ActionType = ActionType.Reading, Definition = "Get Reservation By UserId")]
         public async Task<IActionResult> getReservationByUserId([FromQuery] GetReservationByUserIdQueryRequest getReservationByUserIdQueryRequest)
         {
             List<GetReservationByUserIdQueryResponse> response = await _mediator.Send(getReservationByUserIdQueryRequest);
@@ -72,6 +82,7 @@ namespace SednaReservationAPI.API.Controllers
         }
 
         [HttpGet("room/{roomId}")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Reservation, ActionType = ActionType.Reading, Definition = "Get Reservation By RoomId")]
         public async Task<IActionResult> getReservationByRoomId([FromRoute] GetReservationByRoomIdQueryRequest getReservationByRoomIdQueryRequest)
         {
             List<GetReservationByRoomIdQueryResponse> response = await _mediator.Send(getReservationByRoomIdQueryRequest);

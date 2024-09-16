@@ -14,6 +14,7 @@ namespace SednaReservationAPI.Application.Abstractions.Services
        Task<bool> UpdateRole(string id);
         Task<List<RoleDto>> GetAllRoles();
         Task<RoleDto> GetRoleById(string id);
+    
 
     }
 }

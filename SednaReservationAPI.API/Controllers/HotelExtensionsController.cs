@@ -1,6 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SednaReservationAPI.Application.Consts;
+using SednaReservationAPI.Application.CustomAttributes;
+using SednaReservationAPI.Application.Enum;
 using SednaReservationAPI.Application.Features.Commands.HotelExtensions.Create;
 using SednaReservationAPI.Application.Features.Commands.HotelExtensions.Update;
 using SednaReservationAPI.Application.Features.Commands.RoomExtension;
@@ -25,8 +28,8 @@ namespace SednaReservationAPI.API.Controllers
             _mediator = mediator;
         }
 
-
         [HttpPost]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.HotelExtensions, ActionType = ActionType.Writing, Definition = "Post HotelExtensions")]
         public async Task<IActionResult> AddHotelExtension(CreateHotelExtensionCommandRequest createHotelExtensionCommandRequest)
         {
             CreateHotelExtensionCommandResponse response = await _mediator.Send(createHotelExtensionCommandRequest);
@@ -34,6 +37,7 @@ namespace SednaReservationAPI.API.Controllers
         }
 
         [HttpGet("{hotelId}")]
+      
         public async Task<IActionResult> geHotelExtensions([FromRoute] GetHotelExtensionsByHotelIdQueryRequest getHotelExtensionsByHotelIdQueryRequest)
         {
             List<GetHotelExtensionsByHotelIdQueryResponse> response= await _mediator.Send(getHotelExtensionsByHotelIdQueryRequest);
@@ -41,6 +45,7 @@ namespace SednaReservationAPI.API.Controllers
         }
 
         [HttpPut("Update")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.HotelExtensions, ActionType = ActionType.Updating, Definition = "Update HotelExtensions")]
         public async Task<IActionResult> updateRoomExtensions(UpdateHotelExtensionCommandRequest updateHotelExtensionCommandRequest)
         {
             UpdateHotelExtensionCommandResponse response = await _mediator.Send(updateHotelExtensionCommandRequest);

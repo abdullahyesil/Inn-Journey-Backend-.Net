@@ -15,7 +15,8 @@ namespace SednaReservationAPI.Application.DTOs.User
         public string? Phone { get; set; }
         public string? Age { get; set; }
         public bool Gender { get; set; }
+        public int TotalCount { get; set; }
 
-        
+
     }
 }

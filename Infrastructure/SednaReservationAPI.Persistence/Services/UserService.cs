@@ -5,6 +5,8 @@ using SednaReservationAPI.Application.Abstractions.Services;
 using SednaReservationAPI.Application.DTOs.User;
 using SednaReservationAPI.Application.Exceptions;
 using SednaReservationAPI.Application.Features.Commands.AppUser.CreateAppUser;
+using SednaReservationAPI.Application.Repositories;
+using SednaReservationAPI.Domain.Entities;
 using SednaReservationAPI.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
@@ -17,12 +19,14 @@ namespace SednaReservationAPI.Persistence.Services
     public class UserService : IUserService
     {
         readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
-    
+        readonly IEndPointReadRepository _endPointReadRepository;
 
-        public UserService(UserManager<AppUser> userManager)
+
+
+        public UserService(UserManager<AppUser> userManager, IEndPointReadRepository endPointReadRepository)
         {
             _userManager = userManager;
-           
+            _endPointReadRepository = endPointReadRepository;
         }
 
         public async Task<CreateUserResponse> CreateAsync(CreateUser user)
@@ -83,20 +87,42 @@ namespace SednaReservationAPI.Persistence.Services
             return userDtos;
         }
 
-        public async Task<List<ListUser>> GetAllUserAsync()
+        public async Task<List<ListUser>> GetAllUserAsync(int page, int size, string? value)
         {
-            var users = await _userManager.Users.ToListAsync();
+            var query = _userManager.Users.AsQueryable();  // Sorgu başlangıcı
 
-            var listusers = users.Select(users => new ListUser
+            // Eğer arama değeri varsa, filtre uygula
+            if (!string.IsNullOrEmpty(value))
             {
-                Id = users.Id,
-                Email = users.Email,
-                Name = users.Name,
-                UserName = users.UserName
+                var lowValue = value.ToLower();
+                query = query.Where(i => (i.UserName != null && i.UserName.ToLower().Contains(lowValue)) ||
+                                         (i.Name != null && i.Name.ToLower().Contains(lowValue)));
+            }
+
+            // Toplam kullanıcı sayısını hesapla (filtreli veya filtresiz)
+            var totalCount = await query.CountAsync();
+
+            // Sayfalama uygula ve kullanıcıları çek
+            var users = await query.Skip(page * size)
+                                   .Take(size)
+                                   .ToListAsync();
+
+            // Kullanıcıları DTO'ya (ListUser) dönüştür
+            var listUsers = users.Select(user => new ListUser
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Name = user.Name,
+                UserName = user.UserName,
+                Phone = user.PhoneNumber,
+                Age = user.Age,
+                Gender = user.Gender.HasValue ? user.Gender.Value : false, // Nullable kontrolü
+                TotalCount = totalCount
             }).ToList();
 
-            return listusers;
+            return listUsers;
         }
+
 
         public Task<AppUser> getByIdUser(string id)
         {
@@ -158,7 +184,7 @@ namespace SednaReservationAPI.Persistence.Services
 
         public async Task<bool> AddRoleToUser(string id, List<string> roles)
         {
-            AppUser user = await _userManager.FindByIdAsync(id);
+            AppUser? user = await _userManager.FindByIdAsync(id);
             if (user == null) {
                 return await Task.FromResult(false);
             }
@@ -166,8 +192,11 @@ namespace SednaReservationAPI.Persistence.Services
             if (roles != null)
             {
                 await _userManager.AddToRolesAsync(user, roles);
+                
+                return await Task.FromResult(true);
             }
-            return await Task.FromResult(true);
+            return await Task.FromResult(false);
+
 
         }
 
@@ -175,6 +204,49 @@ namespace SednaReservationAPI.Persistence.Services
         {
             return Task.FromResult(true);
         }
+
+        public async Task<bool> hasRolePermissionToEndPointAsync(string name, string code)
+        {
+             var userRoles= await GetRolesToUserAsync(name);
+            if (!userRoles.Any())
+                return false;
+
+            Endpoint? endpoint = await _endPointReadRepository.Table.Include(e => e.Roles).FirstOrDefaultAsync(e => e.Code == code);
+            if (endpoint == null)
+                return false;
+            var hasRole = false;
+            var endpointRoles = endpoint.Roles.Select(r => r.Name);
+  
+
+            foreach (var role in userRoles) {
+
+                foreach (var endoint in endpointRoles)
+                {
+                    if (userRoles == endpointRoles)
+                        return true;
+                }
+            }
+            return false;
+
+        }
+
+        public async Task<string[]> GetRolesToUserAsync(string userIdOrName)
+        {
+
+            AppUser user = await _userManager.FindByIdAsync(userIdOrName);
+            if (user == null) {
+                user = await _userManager.FindByNameAsync(userIdOrName); 
+            }
+
+            if (user != null) {
+            var userRoles = await _userManager.GetRolesAsync(user);
+                return userRoles.ToArray();
+            }
+
+            return new string[]{};
+        }
+
+
     }
     
 }

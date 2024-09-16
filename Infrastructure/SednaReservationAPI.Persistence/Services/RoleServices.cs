@@ -59,11 +59,13 @@ namespace SednaReservationAPI.Persistence.Services
 
         }
 
+
         public async Task<bool> UpdateRole(string id)
         {
             AppRole appRole = await _roleManager.FindByIdAsync(id);
            IdentityResult result= await _roleManager.UpdateAsync(appRole);
             return result.Succeeded;
         }
+
     }
 }

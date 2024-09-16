@@ -1,0 +1,14 @@
+﻿using SednaReservationAPI.Application.DTOs.Role;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SednaReservationAPI.Application.Features.Queries.Role.GetRolesByUserId
+{
+    public class GetRolesByUserIdQueryResponse
+    {
+        public string[]? Roles { get; set; }
+    }
+}

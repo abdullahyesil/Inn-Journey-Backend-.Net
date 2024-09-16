@@ -12,12 +12,15 @@ namespace SednaReservationAPI.Application.Abstractions.Services
     {
         Task<CreateUserResponse> CreateAsync(CreateUser user);
         Task UpdateRefreshToken(string refreshToken, AppUser user, DateTime accessTokenDate, int addOnAccessToken);
-        Task<List<ListUser>> GetAllUserAsync();
+        Task<List<ListUser>> GetAllUserAsync(int page , int size, string? value);
         Task<AppUser> getByIdUser(string id);
         Task<List<AppUser>> getByIdUsers(IEnumerable<string> ids);
         Task<AppUser> UpdateUser(UpdateUser user);
         Task<bool> AddRoleToUser(string id, List<string> roles);
         Task<bool> RemoveRoleFromUser(string id, List<AppRole> roles);
+
+        Task<string[]> GetRolesToUserAsync(string userIdOrName);
+        Task<bool> hasRolePermissionToEndPointAsync(string name, string code);
 
 
 

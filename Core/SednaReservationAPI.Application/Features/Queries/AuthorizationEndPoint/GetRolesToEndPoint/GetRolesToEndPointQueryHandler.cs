@@ -18,7 +18,7 @@ namespace SednaReservationAPI.Application.Features.Queries.AuthorizationEndPoint
 
         public async Task<GetRolesToEndPointQueryResponse> Handle(GetRolesToEndPointQueryRequest request, CancellationToken cancellationToken)
         {
-            var data = await _authorizationEndPointService.GetRolesToEndPointAsync(request.Id);
+            var data = await _authorizationEndPointService.GetRolesToEndPointAsync(request.Code, request.Menu);
             return new() {
                 Roles =data
             };

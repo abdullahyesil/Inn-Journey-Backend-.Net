@@ -9,6 +9,6 @@ namespace SednaReservationAPI.Application.Abstractions.Services
     public interface IAuthorizationEndPointService
     {
         public Task AssingRoleEndPointAsync(string[] roles ,string menu, string code, Type type);
-        public Task<List<string>> GetRolesToEndPointAsync(string id);
+        public Task<List<string>> GetRolesToEndPointAsync(string code, string menu);
     }
 }

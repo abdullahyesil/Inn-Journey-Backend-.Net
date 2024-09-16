@@ -15,5 +15,6 @@ namespace SednaReservationAPI.Application.Features.Queries.AppUser.GetAllUser
         public string? Phone { get; set; }
         public string? Age { get; set; }
         public bool Gender { get; set; }
+        public int TotalCount { get; set; }
     }
 }

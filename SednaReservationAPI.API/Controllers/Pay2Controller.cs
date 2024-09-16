@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SednaReservationAPI.Application.Abstractions.Services;
+using SednaReservationAPI.Application.CustomAttributes;
 using SednaReservationAPI.Application.DTOs.User;
+using SednaReservationAPI.Application.Enum;
 using SednaReservationAPI.Application.Features.Commands.AppUser.CreateAppUser;
 using SednaReservationAPI.Application.Features.Commands.AppUser.LoginUser;
 using SednaReservationAPI.Application.Features.Commands.Payment.CreatePayment;
@@ -31,6 +33,7 @@ namespace SednaReservationAPI.API.Controllers
             _service = service;
         }
         [HttpPost]
+        [AuthorizeDefinition(ActionType = ActionType.Writing, Definition = "Send Pay", Menu = "Pay")]
         public async Task<IActionResult> Pay(Domain.Entities.Pay pay)
         {
            

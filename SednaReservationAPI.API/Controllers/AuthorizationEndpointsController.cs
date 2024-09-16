@@ -24,8 +24,8 @@ namespace SednaReservationAPI.API.Controllers
             return Ok(resp);
         }
 
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> getRolestoEndpoint([FromRoute]GetRolesToEndPointQueryRequest endPointQueryRequest)
+        [HttpPost("get-roles-to-endpoint")]
+        public async Task<IActionResult> getRolestoEndpoint(GetRolesToEndPointQueryRequest endPointQueryRequest)
         { 
             GetRolesToEndPointQueryResponse response= await _mediator.Send(endPointQueryRequest);
             return Ok(response);

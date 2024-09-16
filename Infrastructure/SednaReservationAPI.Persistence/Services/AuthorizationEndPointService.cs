@@ -89,10 +89,14 @@ namespace SednaReservationAPI.Persistence.Services
 
         }
 
-        public async Task<List<string>> GetRolesToEndPointAsync(string id)
+        public async Task<List<string>> GetRolesToEndPointAsync(string code, string menu)
         {
-          Endpoint? endpoint= await _endPointReadRepository.Table.Include(e => e.Roles).FirstOrDefaultAsync(e=> e.Id == Guid.Parse(id));
+          Endpoint? endpoint= await _endPointReadRepository.Table.Include(e => e.Roles).Include(e=> e.Menu).FirstOrDefaultAsync(e=> e.Code == code && e.Menu.Name == menu);
         
+            if(endpoint == null)
+            {
+                return null;
+            }
            return endpoint.Roles.Select(r=> r.Name).ToList();
         }
     }

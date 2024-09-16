@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SednaReservationAPI.API.Filters;
 using SednaReservationAPI.Application.Consts;
 using SednaReservationAPI.Application.CustomAttributes;
 using SednaReservationAPI.Application.Enum;
@@ -35,6 +36,7 @@ namespace SednaReservationAPI.API.Controllers
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme) ]
 
+       
         [HttpGet]
         [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Hotels, ActionType = ActionType.Reading, Definition = "Get Hotels")]
         public async Task<IActionResult> Get([FromQuery] GetAllHotelQueryRequest getAllHotelQueryRequest)
@@ -42,7 +44,10 @@ namespace SednaReservationAPI.API.Controllers
             List<GetAllHotelQueryResponse> response = await _mediator.Send(getAllHotelQueryRequest);
             return Ok(response);
         }
+
         [HttpGet("{id}")]
+
+       
         [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Hotels, ActionType = ActionType.Reading, Definition = "Get Hotels ById")]
         public async Task<IActionResult> GetById([FromRoute] GetByIdHotelQueryRequest getByIdHotelQueryRequest)
         {
@@ -73,6 +78,7 @@ namespace SednaReservationAPI.API.Controllers
             return Ok(response);
         }
 
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Hotels, ActionType = ActionType.Reading, Definition = "Get My Hotels")]
         [HttpGet("myHotels/{userId}")]
         public async Task<IActionResult> getMyHotels([FromRoute] GetByAdminAllHotelQueryRequest getByAdminAllHotelQueryRequest)
         {
